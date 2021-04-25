@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { TreeRepository } from "typeorm";
 import { ClientesService } from "../services/ClientesService";
 
 class ClientesController {
