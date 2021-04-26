@@ -2,12 +2,10 @@ import { getCustomRepository, Repository } from "typeorm";
 import { Cliente } from "../entities/cliente";
 import { ClientesRepository } from "../repositories/ClientesRepository";
 
-interface IClientesCreate {
-  email: string;
-}
-
-interface IClientesUpdate {
-  id: string;
+interface IClientes {
+  id: number;
+  nome: string;
+  sobrenome: string;
   email: string;
 }
 
@@ -25,7 +23,19 @@ class ClientesService {
     });
 
     if (!cliente) {
-      throw new Error("Cliente not found");
+      throw new Error("Cliente não encontrado");
+    }
+
+    return cliente;
+  }
+
+  async findByID(id: number) {
+    const cliente = await this.clientesRepository.findOne({
+      id
+    });
+
+    if (!cliente) {
+      throw new Error("Cliente não encontrado");
     }
 
     return cliente;
@@ -37,17 +47,28 @@ class ClientesService {
     return clientes;
   }
 
-  async create({ email }: IClientesCreate) {
+  async create({ id, nome, sobrenome, email }: IClientes) {
 
-    const clienteAlreadyExists = await this.clientesRepository.findOne({
+    let clienteAlreadyExists = await this.clientesRepository.findOne({
       email
     });
 
     if (clienteAlreadyExists) {
-      throw new Error("Cliente already exists!");
+      throw new Error("E-mail já utilizado");
+    }
+
+    clienteAlreadyExists = await this.clientesRepository.findOne({
+      id
+    });
+
+    if (clienteAlreadyExists) {
+      throw new Error("ID Cliente já utilizado");
     }
 
     const cliente = this.clientesRepository.create({
+      id,
+      nome,
+      sobrenome,
       email
     });
 
@@ -56,22 +77,21 @@ class ClientesService {
     return cliente;
   }
 
-  async update({ id, email }: IClientesUpdate) {
+  async update({ id, nome, sobrenome, email }: IClientes) {
 
     const cliente = await this.clientesRepository.findOne({
       id
     });
 
     if (!cliente) {
-      throw new Error("ID Cliente not found");
+      throw new Error("ID Cliente não encontrado");
     }
 
-    await this.clientesRepository.createQueryBuilder()
-      .update("Cliente")
-      .set({ email })
-      .where("id = :id", {
-        id
-      }).execute();
+    cliente.nome = nome;
+    cliente.sobrenome = sobrenome;
+    cliente.email = email;
+
+    await this.clientesRepository.save(cliente);
 
     const clienteAlterado = await this.clientesRepository.findOne({
       id

@@ -2,13 +2,8 @@ import { getCustomRepository, Repository } from "typeorm";
 import { Produto } from "../entities/produto";
 import { ProdutosRepository } from "../repositories/ProdutosRepository";
 
-interface IProdutosCreate {
-  descricao: string;
-  valor: number;
-}
-
-interface IProdutosUpdate {
-  id: string;
+interface IProdutos {
+  id: number;
   descricao: string;
   valor: number;
 }
@@ -33,25 +28,46 @@ class ProdutosService {
       .where("LOWER(descricao) LIKE LOWER(:descricao)", { descricao: "%" + descricao + "%" })
       .getMany();
 
-    if (!produtos) {
-      throw new Error("Produto(s) not found");
+    if (produtos.length === 0) {
+      throw new Error("Produto(s) não encontrado(s)");
     }
 
     return produtos;
   }
 
-  async create({ descricao, valor }: IProdutosCreate) {
+  async findByID(id: number) {
+    const produtos = await this.produtosRepository.findOne({
+      id
+    });
 
-    const produtoAlreadyExists = await this.produtosRepository
+    if (!produtos) {
+      throw new Error("Produto não encontrado");
+    }
+
+    return produtos;
+  }
+
+  async create({ id, descricao, valor }: IProdutos) {
+
+    let produtoAlreadyExists = await this.produtosRepository
       .createQueryBuilder()
       .where("LOWER(descricao) = LOWER(:descricao)", { descricao })
       .getOne();
 
     if (produtoAlreadyExists) {
-      throw new Error("Produto already exists!");
+      throw new Error("Produto já cadastrado");
+    }
+
+    produtoAlreadyExists = await this.produtosRepository.findOne({
+      id
+    });
+
+    if (produtoAlreadyExists) {
+      throw new Error("Código Produto já utilizado");
     }
 
     const produto = this.produtosRepository.create({
+      id,
       descricao,
       valor
     });
@@ -61,22 +77,20 @@ class ProdutosService {
     return produto;
   }
 
-  async update({ id, descricao, valor }: IProdutosUpdate) {
+  async update({ id, descricao, valor }: IProdutos) {
 
     const produto = await this.produtosRepository.findOne({
       id
     });
 
     if (!produto) {
-      throw new Error("ID Produto not found");
+      throw new Error("ID Produto não encontrado");
     }
 
-    await this.produtosRepository.createQueryBuilder()
-      .update("Produto")
-      .set({ descricao, valor })
-      .where("id = :id", {
-        id
-      }).execute();
+    produto.descricao = descricao;
+    produto.valor = valor;
+
+    await this.produtosRepository.save(produto);
 
     const produtoAlterado = await this.produtosRepository.findOne({
       id

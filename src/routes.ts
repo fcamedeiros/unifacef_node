@@ -8,12 +8,14 @@ const clientesController = new ClientesController();
 const produtosController = new ProdutosController();
 
 routes.get("/clientes", clientesController.findAll);
-routes.get("/clientes/:email", clientesController.findByEmail);
+routes.get("/clientes/email/:email", clientesController.findByEmail);
+routes.get("/clientes/id/:id", clientesController.findByID);
 routes.post("/clientes", clientesController.create);
 routes.put("/clientes", clientesController.update);
 
 routes.get("/produtos", produtosController.findAll);
-routes.get("/produtos/:descricao", produtosController.findByDescricao);
+routes.get("/produtos/descricao/:descricao", produtosController.findByDescricao);
+routes.get("/produtos/id/:id", produtosController.findByID);
 routes.post("/produtos", produtosController.create);
 routes.put("/produtos", produtosController.update);
 

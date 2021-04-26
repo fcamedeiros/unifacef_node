@@ -9,8 +9,16 @@ export class CreateClientes1619361319720 implements MigrationInterface {
                 columns: [
                     {
                         name: "id",
-                        type: "uuid",
+                        type: "number",
                         isPrimary: true
+                    },
+                    {
+                        name: "nome",
+                        type: "varchar",
+                    },
+                    {
+                        name: "sobrenome",
+                        type: "varchar",
                     },
                     {
                         name: "email",

@@ -32,14 +32,37 @@ class ProdutosController {
     }
   }
 
-  async create(request: Request, response: Response) {
+  async findByID(request: Request, response: Response) {
 
-    const { descricao, valor } = request.body;
+    const { id } = request.params;
     const produtosService = new ProdutosService();
 
     try {
 
-      const produto = await produtosService.create({ descricao, valor });
+      const produtos = await produtosService.findByID(Number(id));
+
+      return response.json(produtos);
+
+    } catch (error) {
+
+      return response.status(404).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async create(request: Request, response: Response) {
+
+    const { id, descricao, valor } = request.body;
+    const produtosService = new ProdutosService();
+
+    try {
+
+      const produto = await produtosService.create({
+        id,
+        descricao,
+        valor
+      });
 
       return response.json(produto);
 
@@ -57,7 +80,11 @@ class ProdutosController {
 
     try {
 
-      const produto = await produtosService.update({ id, descricao, valor });
+      const produto = await produtosService.update({
+        id,
+        descricao,
+        valor
+      });
 
       return response.json(produto);
 

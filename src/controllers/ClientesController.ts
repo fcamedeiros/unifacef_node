@@ -32,14 +32,38 @@ class ClientesController {
     }
   }
 
-  async create(request: Request, response: Response) {
+  async findByID(request: Request, response: Response) {
 
-    const { email } = request.body;
+    const { id } = request.params;
     const clientesService = new ClientesService();
 
     try {
 
-      const cliente = await clientesService.create({ email });
+      const cliente = await clientesService.findByID(Number(id));
+
+      return response.json(cliente);
+
+    } catch (error) {
+
+      return response.status(404).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async create(request: Request, response: Response) {
+
+    const { id, nome, sobrenome, email } = request.body;
+    const clientesService = new ClientesService();
+
+    try {
+
+      const cliente = await clientesService.create({
+        id,
+        nome,
+        sobrenome,
+        email
+      });
 
       return response.json(cliente);
 
@@ -52,12 +76,17 @@ class ClientesController {
   }
 
   async update(request: Request, response: Response) {
-    const { id, email } = request.body;
+    const { id, nome, sobrenome, email } = request.body;
     const clientesService = new ClientesService();
 
     try {
 
-      const cliente = await clientesService.update({ id, email });
+      const cliente = await clientesService.update({
+        id,
+        nome,
+        sobrenome,
+        email
+      });
 
       return response.json(cliente);
 

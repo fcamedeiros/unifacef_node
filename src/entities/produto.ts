@@ -1,16 +1,15 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { v4 as uuid } from "uuid";
 
 @Entity("produtos")
 class Produto {
 
-  @PrimaryColumn()
-  id: string;
+  @PrimaryColumn({ nullable: false })
+  id: number;
 
-  @Column()
+  @Column({ nullable: false })
   descricao: string;
 
-  @Column()
+  @Column({ nullable: false })
   valor: number;
 
   @CreateDateColumn()
@@ -19,11 +18,6 @@ class Produto {
   @UpdateDateColumn()
   updated_at: Date;
 
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }
 
 export { Produto }
