@@ -6,6 +6,7 @@ interface IProdutos {
   id: number;
   descricao: string;
   valor: number;
+  quantidade: number;
 }
 
 class ProdutosService {
@@ -47,7 +48,7 @@ class ProdutosService {
     return produtos;
   }
 
-  async create({ id, descricao, valor }: IProdutos) {
+  async create({ id, descricao, valor, quantidade }: IProdutos) {
 
     let produtoAlreadyExists = await this.produtosRepository
       .createQueryBuilder()
@@ -69,7 +70,8 @@ class ProdutosService {
     const produto = this.produtosRepository.create({
       id,
       descricao,
-      valor
+      valor,
+      quantidade
     });
 
     await this.produtosRepository.save(produto);
@@ -77,7 +79,7 @@ class ProdutosService {
     return produto;
   }
 
-  async update({ id, descricao, valor }: IProdutos) {
+  async update({ id, descricao, valor, quantidade }: IProdutos) {
 
     const produto = await this.produtosRepository.findOne({
       id
@@ -89,6 +91,7 @@ class ProdutosService {
 
     produto.descricao = descricao;
     produto.valor = valor;
+    produto.quantidade = quantidade;
 
     await this.produtosRepository.save(produto);
 

@@ -12,6 +12,9 @@ class Produto {
   @Column({ nullable: false })
   valor: number;
 
+  @Column({ nullable: false })
+  quantidade: number;
+
   @CreateDateColumn()
   created_at: Date;
 

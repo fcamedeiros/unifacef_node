@@ -53,7 +53,7 @@ class ProdutosController {
 
   async create(request: Request, response: Response) {
 
-    const { id, descricao, valor } = request.body;
+    const { id, descricao, valor, quantidade } = request.body;
     const produtosService = new ProdutosService();
 
     try {
@@ -61,10 +61,17 @@ class ProdutosController {
       const produto = await produtosService.create({
         id,
         descricao,
-        valor
+        valor,
+        quantidade
       });
 
-      return response.json(produto);
+      if (produto) {
+        return response.status(201).json(produto);
+      } else {
+        return response.status(404).json({
+          message: "Algo deu errado"
+        });
+      }
 
     } catch (error) {
 
@@ -75,7 +82,7 @@ class ProdutosController {
   }
 
   async update(request: Request, response: Response) {
-    const { id, descricao, valor } = request.body;
+    const { id, descricao, valor, quantidade } = request.body;
     const produtosService = new ProdutosService();
 
     try {
@@ -83,10 +90,17 @@ class ProdutosController {
       const produto = await produtosService.update({
         id,
         descricao,
-        valor
+        valor,
+        quantidade
       });
 
-      return response.json(produto);
+      if (produto) {
+        return response.status(200).json(produto);
+      } else {
+        return response.status(404).json({
+          message: "Algo deu errado"
+        });
+      }
 
     } catch (error) {
 

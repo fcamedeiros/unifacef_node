@@ -65,7 +65,13 @@ class ClientesController {
         email
       });
 
-      return response.json(cliente);
+      if (cliente) {
+        return response.status(201).json(cliente);
+      } else {
+        return response.status(404).json({
+          message: "Algo deu errado"
+        });
+      }
 
     } catch (error) {
 
@@ -88,7 +94,13 @@ class ClientesController {
         email
       });
 
-      return response.json(cliente);
+      if (cliente) {
+        return response.status(200).json(cliente);
+      } else {
+        return response.status(404).json({
+          message: "Algo deu errado"
+        });
+      }
 
     } catch (error) {
 
