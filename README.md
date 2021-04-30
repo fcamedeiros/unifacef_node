@@ -16,4 +16,4 @@ Ferramentas utilizadas neste projeto:
 
 ## Modelo de Dados
 
-![DiagramaProjeto](https://user-images.githubusercontent.com/35452578/116260910-81fb9100-a74d-11eb-87d1-c4811750dcae.png)
+![DiagramaProjeto](https://user-images.githubusercontent.com/35452578/116741656-c6e12b00-a9cc-11eb-8482-731577709ac2.png)

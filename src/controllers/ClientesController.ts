@@ -109,6 +109,16 @@ class ClientesController {
       });
     }
   }
+
+  async showPedidosCliente(request: Request, response: Response) {
+    const { cliente_id } = request.params;
+
+    const clientesService = new ClientesService();
+
+    const listPedidos = await clientesService.listPedidosCliente(Number(cliente_id));
+
+    return response.json(listPedidos);
+  }
 }
 
 export { ClientesController }

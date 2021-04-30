@@ -1,5 +1,5 @@
 import { getCustomRepository, Repository } from "typeorm";
-import { Produto } from "../entities/produto";
+import { Produto } from "../entities/Produto";
 import { ProdutosRepository } from "../repositories/ProdutosRepository";
 
 interface IProdutos {

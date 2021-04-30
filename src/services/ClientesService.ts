@@ -1,6 +1,8 @@
 import { getCustomRepository, Repository } from "typeorm";
-import { Cliente } from "../entities/cliente";
+import { Cliente } from "../entities/Cliente";
+import { Pedido } from "../entities/Pedido";
 import { ClientesRepository } from "../repositories/ClientesRepository";
+import { PedidosRepository } from "../repositories/PedidosRepository";
 
 interface IClientes {
   id: number;
@@ -12,9 +14,11 @@ interface IClientes {
 class ClientesService {
 
   private clientesRepository: Repository<Cliente>;
+  private pedidosRepository: Repository<Pedido>;
 
   constructor() {
     this.clientesRepository = getCustomRepository(ClientesRepository);
+    this.pedidosRepository = getCustomRepository(PedidosRepository);
   }
 
   async findByEmail(email: string) {
@@ -98,6 +102,17 @@ class ClientesService {
     });
 
     return clienteAlterado;
+  }
+
+  async listPedidosCliente(cliente_id: number) {
+
+    const listPedidos = await this.pedidosRepository.createQueryBuilder()
+      .where("cliente_id = :cliente_id", {
+        cliente_id
+      })
+      .getMany();
+
+    return listPedidos;
   }
 }
 
